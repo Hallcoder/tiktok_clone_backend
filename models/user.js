@@ -5,14 +5,12 @@ const userSchema = new mongoose.Schema({
     email:{
         type:String,
         required:true,
-        unique:true
     },
     username:{
         type:String,
         minlength:1,
         maxlength:100,
         required:true,
-        unique:true
     },
     password:{
         type:String,
@@ -22,12 +20,22 @@ const userSchema = new mongoose.Schema({
     },
     resetPasswordToken:{
         type:String
+    },
+    profilePicture:{
+        type:String,
+        default:'avatar',
+        required:false,
+    },
+    posts:{
+        type:Array,
+    },
+    followers:{
+        type:Array,
+    },
+    following:{
+        type:Array,
     }
 })
-userSchema.methods.generateAuthToken = () =>{
-    const token = jwt.sign({_id:this._id,username:this.username},process.env.JWT_PRIVATE_KEY)
-    return token;
-}
 function validateUser(user,type){
     const schema   = Joi.object({
         username:Joi.string().min(1).required(),
@@ -43,5 +51,10 @@ function validateUser(user,type){
     }
     return schema.validate(user);
 }
+userSchema.methods.generateAuthToken = function(){
+    const token = jwt.sign(JSON.stringify({_id:this._id,email:this.email}),process.env.JWT_PRIVATE_KEY)
+    return token;
+}
 module.exports.validate = validateUser
+module.exports.userType = userSchema;
 module.exports.User = mongoose.model('users',userSchema);
