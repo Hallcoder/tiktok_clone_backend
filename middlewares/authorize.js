@@ -3,9 +3,8 @@ const jwt = require('jsonwebtoken');
 module.exports.Auth = async (req, res, next) => {
     try {
         const token = req.cookies.token;
+        if(!token) return res.status(403).json({message:'Unauthorized',status:'failed'});
         const payLoad = jwt.verify(token,process.env.JWT_PRIVATE_KEY);
-        console.log('payLoad:',payLoad);
-        if(!payLoad) return res.status(403).json({message:'Unauthorized',status:'failed'});
         req.user = payLoad;
         next();
     } catch (error) {

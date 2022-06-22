@@ -8,7 +8,7 @@ const postSchema=  new mongoose.Schema({
     },
     dateUploaded:{
         type:Date,
-        default:new Date().now(),
+        default:Date.now(),
     },
     likes:{
         type:Array,
@@ -16,7 +16,7 @@ const postSchema=  new mongoose.Schema({
     },
     comments:{
         type:Array,
-        default:[{user:'Foo',count:0,date:new Date().now(),replies:[],message:'Nice Picture Bro!'}]
+        default:[{user:'Foo',count:0,date:Date.now(),replies:[],message:'Nice Picture Bro!'}]
     },
     shares:{
         type:Array,
@@ -25,8 +25,11 @@ const postSchema=  new mongoose.Schema({
     content:{
         type:Object,
         required:true
+    },
+    tags:{
+        type:Array
     }
-});
+    });
 
 // function validatePost(post){
 //     const schema  = Joi.object({

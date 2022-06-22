@@ -1,5 +1,7 @@
 const express = require('express');
-const { upload } = require('../controllers/post');
+const { upload,getPosts } = require('../controllers/post');
+const { Auth } = require('../middlewares/authorize');
 const router = express.Router();
-const authorize = require('../middlewares/authorize')
-router.post('/post',authorize,upload())
+router.post('/upload',Auth,upload());
+router.get('/posts',getPosts());
+module.exports.post = router;
