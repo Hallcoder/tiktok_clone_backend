@@ -18,6 +18,6 @@ app.use(cookieParser())
 app.use('/user',user)
 app.use('/post',post)
 db();
-app.listen(PORT,()=>{
+app.listen(process.env.PORT || PORT,()=>{
     console.log('listening on port',PORT);
 })
