@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
+const avatars = ["https://avatars.dicebear.com/api/male/john.svg?mood[]=happy&mood[]=sad","https://avatars.dicebear.com/api/male/john.svg?mood[]=happy&mood[]=sad","https://avatars.dicebear.com/api/male/william.svg?mood[]=happy&mood[]=sad","https://avatars.dicebear.com/api/male/christian.svg?mood[]=happy&mood[]=joy","https://avatars.dicebear.com/api/female/john.svg?mood[]=happy"];
+console.log(avatars[Math.floor(Math.random()*3)])
 const userSchema = new mongoose.Schema({
     email:{
         type:String,
@@ -23,7 +25,7 @@ const userSchema = new mongoose.Schema({
     },
     profilePicture:{
         type:String,
-        default:'avatar',
+        default:avatars[Math.floor(Math.random()*3)],
         required:false,
     },
     posts:{

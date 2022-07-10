@@ -17,7 +17,7 @@ module.exports.signup = () => {
       let hashed = await bcrypt.hash(user.password,salt);
       user.password  = hashed;
       await user.save();
-      return res.status(200).json({data:lodash.pick(user, ["username","email"]),message:"User registered successfully",status:"success"});
+      return res.status(200).json({data:lodash.pick(user, ["username","email","profilePicture"]),message:"User registered successfully",status:"success"});
     } catch (error) {
      console.error(error);
      return  res.status(500).json({message:"internal server error",status:"failed"});
@@ -39,7 +39,8 @@ module.exports.login = () => {
             httpOnly:false,
             sameSite:'none',
         })
-        res.status(200).json({data:lodash.pick(user,["username","email"]),message:"Login successfully",status: "success"});
+        await user.save();
+        res.status(200).json({data:lodash.pick(user,["username","email","profilePicture"]),message:"Login successfully",status: "success"});
       } catch (error) {
         console.log(error)
        return res.status(401).json({ message: 'internal server error', status: "failed!" });
@@ -50,6 +51,7 @@ module.exports.uploadImage = ()=>{
   return async(req,res)=>{
     const image = req.body.image;
     const token = req.cookies.token;
+    console.log(req.user)
     const user  = await User.findOne({email:req.user.email})
     if(!token) return res.status(403).json({message:"Not authorized"})
     const uploadedImage =  await cloudinary.uploader.upload_large(image.file,{

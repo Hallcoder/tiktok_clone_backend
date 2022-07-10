@@ -12,15 +12,15 @@ const postSchema=  new mongoose.Schema({
     },
     likes:{
         type:Array,
-        default:[{user:'Foo',count:0}]
+        default:[{user:'Foo'}]
     },
     comments:{
         type:Array,
-        default:[{user:'Foo',count:0,date:Date.now(),replies:[],message:'Nice Picture Bro!'}]
+        default:[{user:'Foo',date:Date.now(),replies:[],message:'Nice Picture Bro!'}]
     },
     shares:{
         type:Array,
-        default:[{user:'Foo',count:0}],
+        default:[{user:'Foo'}],
     },
     content:{
         type:Object,
@@ -28,6 +28,10 @@ const postSchema=  new mongoose.Schema({
     },
     tags:{
         type:Array
+    },
+    isLikedByCurrentUser:{
+        type:Boolean,
+        default:false
     }
     });
 

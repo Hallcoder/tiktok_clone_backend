@@ -8,8 +8,8 @@ const app = express();
 const PORT= 4000;
 app.use(express.json({limit:'250mb'}))
 app.use(function(req,res,next){
-    cors({origin:'https://tiktok-clone2.vercel.app'})
-    res.header('Access-Control-Allow-Origin', 'https://tiktok-clone2.vercel.app')
+    cors({origin:'http://localhost:3000'})
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
     res.header('Access-Control-Allow-Headers', 'X-Request-With,Accept,Content-Type,X-HTTP-Method-Override')
     res.header('Access-Control-Allow-Credentials', true)
     next()

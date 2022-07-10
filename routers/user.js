@@ -4,7 +4,7 @@ const {signup,login,resetPassword,uploadImage} = require('../controllers/user');
 const { Auth } = require('../middlewares/authorize');
 router
 .post('/signup',signup())
-.post('/profilePicture',uploadImage())
+.post('/profilePicture',Auth,uploadImage())
 .post('/login',login())
 .post('/resetPassword',resetPassword())
 module.exports.user = router;

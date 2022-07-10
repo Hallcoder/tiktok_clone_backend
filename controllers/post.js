@@ -5,7 +5,6 @@ module.exports.upload = () => {
   return async (req, res) => {
     try {
       const video = req.body;
-      // console.log(video.caption);
       if (!req.user)
         return res
           .status(401)
@@ -35,22 +34,40 @@ module.exports.upload = () => {
           .status(404)
           .json({ message: "User is not found", status: "failed" });
       await user.save();
-    const post  = new Post({
-       uploadedBy:user,
-       content:uploadedVideo
-    })
-    await post.save();
-    res.status(200).json({message: "Video uploaded successfully", status: "success"});
+      const post = new Post({
+        uploadedBy: user,
+        content: uploadedVideo,
+      });
+      await post.save();
+      res
+        .status(200)
+        .json({ message: "Video uploaded successfully", status: "success" });
     } catch (error) {
       console.log(error);
+      res.status(500).json({message:error})
     }
   };
 };
 
-
 module.exports.getPosts = () => {
-return async (req, res) => {
-  const posts = await Post.find({});
-  res.status(200).json({data:posts,status: "success"});
-}
+  return async (req, res) => {
+    const posts = await Post.find({});
+    res.status(200).json({ data: posts, status: "success" });
+  };
+};
+module.exports.like = () => {
+  return async(req,res) => {
+    let post;
+    if(req.body.action === 'like'){
+       post = await Post.findByIdAndUpdate(req.body.post._id,{
+        $push:{likes:req.body.user}
+      });
+    }else{
+      post = await Post.findByIdAndUpdate(req.body.post._id,{
+        $pull:{likes:req.body.user}
+      })
+    }
+   await post.save();
+   return res.status(200).json({message:`${req.body.action} successfully done`,status:'success'});
+  }
 }
