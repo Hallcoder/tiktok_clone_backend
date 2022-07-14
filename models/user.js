@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema({
     },
     following:{
         type:Array,
+    },
+    bio:{
+        type:String,
+        maxLength:80
     }
 })
 function validateUser(user,type){
