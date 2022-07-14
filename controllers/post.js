@@ -73,7 +73,6 @@ module.exports.like = () => {
 }
 module.exports.comment = () => {
   return async(req,res) =>{
-    console.log(req.body)
     const post = await Post.findByIdAndUpdate(req.body.post,{
       $push:{comments:{user:req.body.user,replies:[],content:req.body.comment,date:new Date()}}
     })
