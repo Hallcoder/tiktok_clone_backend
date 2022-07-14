@@ -12,15 +12,14 @@ const postSchema=  new mongoose.Schema({
     },
     likes:{
         type:Array,
-        default:[{user:'Foo'}]
     },
     comments:{
         type:Array,
-        default:[{user:'Foo',date:Date.now(),replies:[],message:'Nice Picture Bro!'}]
+       // default:[{user:'Foo',date:Date.now(),replies:[],message:'Nice Picture Bro!'}]
     },
     shares:{
         type:Array,
-        default:[{user:'Foo'}],
+        //default:[{user:'Foo'}],
     },
     content:{
         type:Object,

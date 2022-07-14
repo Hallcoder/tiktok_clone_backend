@@ -59,15 +59,25 @@ module.exports.like = () => {
   return async(req,res) => {
     let post;
     if(req.body.action === 'like'){
-       post = await Post.findByIdAndUpdate(req.body.post._id,{
+       post = await Post.findByIdAndUpdate(req.body.post,{
         $push:{likes:req.body.user}
       });
     }else{
-      post = await Post.findByIdAndUpdate(req.body.post._id,{
+      post = await Post.findByIdAndUpdate(req.body.post,{
         $pull:{likes:req.body.user}
       })
     }
    await post.save();
    return res.status(200).json({message:`${req.body.action} successfully done`,status:'success'});
+  }
+}
+module.exports.comment = () => {
+  return async(req,res) =>{
+    console.log(req.body)
+    const post = await Post.findByIdAndUpdate(req.body.post,{
+      $push:{comments:{user:req.body.user,replies:[],content:req.body.comment,date:new Date()}}
+    })
+    await post.save();
+    return res.status(200).json({message:'commented successfully',status:'sucess'})
   }
 }
