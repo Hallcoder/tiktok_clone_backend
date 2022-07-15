@@ -40,10 +40,10 @@ module.exports.login = () => {
             sameSite:'none',
         })
         await user.save();
-        res.status(200).json({data:lodash.pick(user,["username","email","profilePicture"]),message:"Login successfully",status: "success"});
+        res.status(200).json({data:lodash.pick(user,["username","_id","email","profilePicture"]),message:"Login successfully",status: "success"});
       } catch (error) {
         console.log(error)
-       return res.status(401).json({ message: 'internal server error', status: "failed!" });
+       return res.status(500).json({ message: 'internal server error', status: "failed!" });
       }
   };
 };
@@ -51,16 +51,21 @@ module.exports.uploadImage = ()=>{
   return async(req,res)=>{
     const image = req.body.image;
     const token = req.cookies.token;
-    console.log(req.user)
     const user  = await User.findOne({email:req.user.email})
     if(!token) return res.status(403).json({message:"Not authorized"})
-    const uploadedImage =  await cloudinary.uploader.upload_large(image.file,{
-      folder:'tiktok/users',
-      use_filename:true
-    });
-    user.profilePicture = uploadedImage.secure_url;
-    await user.save();
-    return res.status(200).json({data:user,message:'Video successfull posted',status:"success"})
+    try {
+      const uploadedImage =  await cloudinary.uploader.upload_large(image.file,{
+        folder:'tiktok/users',
+        use_filename:true
+      });
+      user.profilePicture = uploadedImage.secure_url;
+      await user.save();
+      return res.status(200).json({data:user,message:'Video successfull posted',status:"success"})
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({message:'internal server Error'})
+    }
+   
   }
 }
 module.exports.resetPassword = () => {
@@ -69,20 +74,24 @@ module.exports.resetPassword = () => {
 
 module.exports.updateUser = () => {
   return async (req, res) => {
-    console.log(req.body)
     const image = req.body.data.profilePicture;
     const token = req.cookies.token;
-    console.log(token)
     // if(!token) return res.status(403).json({message:"Not authorized"})
-    const uploadedImage =  await cloudinary.uploader.upload_large(image,{
-      folder:'tiktok/users',
-      use_filename:true
-    });
-    const user = await User.findOneAndUpdate(req.body.user._id,
-      lodash.pick(req.body.data, ["username","bio"])
-    )
-    user.profilePicture = uploadedImage.secure_url;
-    await user.save();
-    return res.status(200).json({message:"User updated successfully",data:lodash.pick(user,['username','_id','profilePicture','bio']),status: "success"})
+    try {
+      const uploadedImage =  await cloudinary.uploader.upload_large(image,{
+        folder:'tiktok/users',
+        use_filename:true
+      });
+      const user = await User.findByIdAndUpdate(req.body.user._id,
+        lodash.pick(req.body.data, ["username","bio"])
+      )
+      user.profilePicture = uploadedImage.secure_url;
+      await user.save();
+      return res.status(200).json({message:"User updated successfully",data:lodash.pick(user,['username','_id','profilePicture','bio']),status: "success"})
+    } catch (error) {
+      console.log(error)
+      return  res.status(500).json({message:'internal server error'})
+    }
+    
   }
 }

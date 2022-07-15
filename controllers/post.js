@@ -58,17 +58,23 @@ module.exports.getPosts = () => {
 module.exports.like = () => {
   return async(req,res) => {
     let post;
-    if(req.body.action === 'like'){
+    try {
+      if(req.body.action === 'like'){
+        post = await Post.findByIdAndUpdate(req.body.post,{
+         $push:{likes:req.body.user}
+       });
+     }else{
        post = await Post.findByIdAndUpdate(req.body.post,{
-        $push:{likes:req.body.user}
-      });
-    }else{
-      post = await Post.findByIdAndUpdate(req.body.post,{
-        $pull:{likes:req.body.user}
-      })
+         $pull:{likes:req.body.user}
+       })
+     }
+    await post.save();
+    return res.status(200).json({message:`${req.body.action} successfully done`,status:'success'});
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'internal server error'})
     }
-   await post.save();
-   return res.status(200).json({message:`${req.body.action} successfully done`,status:'success'});
+    
   }
 }
 module.exports.comment = () => {
