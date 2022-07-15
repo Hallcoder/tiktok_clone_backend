@@ -10,6 +10,7 @@ app.use(express.json({limit:'250mb'}))
 app.use(function(req,res,next){
     cors({origin:'http://localhost:3000'})
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+    res.header('Access-Control-Allow-Methods', 'PUT,GET,POST')
     res.header('Access-Control-Allow-Headers', 'X-Request-With,Accept,Content-Type,X-HTTP-Method-Override')
     res.header('Access-Control-Allow-Credentials', true)
     next()

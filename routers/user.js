@@ -7,5 +7,5 @@ router
 .post('/profilePicture',Auth,uploadImage())
 .post('/login',login())
 .post('/resetPassword',resetPassword())
-.post('/updateInfo',Auth,updateUser())
+.put('/updateInfo',updateUser())
 module.exports.user = router;

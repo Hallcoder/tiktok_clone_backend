@@ -69,18 +69,20 @@ module.exports.resetPassword = () => {
 
 module.exports.updateUser = () => {
   return async (req, res) => {
+    console.log(req.body)
     const image = req.body.data.profilePicture;
     const token = req.cookies.token;
-    if(!token) return res.status(403).json({message:"Not authorized"})
+    console.log(token)
+    // if(!token) return res.status(403).json({message:"Not authorized"})
     const uploadedImage =  await cloudinary.uploader.upload_large(image,{
       folder:'tiktok/users',
       use_filename:true
     });
-    const user = await User.findByIdAndUpdate(req.body.user,
+    const user = await User.findOneAndUpdate(req.body.user._id,
       lodash.pick(req.body.data, ["username","bio"])
     )
     user.profilePicture = uploadedImage.secure_url;
     await user.save();
-    return res.status(200).json({message:"User updated successfully",status: "success"})
+    return res.status(200).json({message:"User updated successfully",data:lodash.pick(user,['username','_id','profilePicture','bio']),status: "success"})
   }
 }
