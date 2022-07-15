@@ -6,11 +6,11 @@ const cors = require('cors');
 const { post } = require('./routers/posts');
 const { accounts } = require('./routers/accounts');
 const app = express();
-const PORT= process.env.PORT ||  4000;
+const PORT= process.env.PORT;
 app.use(express.json({limit:'250mb'}))
 app.use(function(req,res,next){
-    cors({origin:'http://localhost:3000'})
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+    cors({origin:'https://tiktok-clone2.vercel.app'})
+    res.header('Access-Control-Allow-Origin', 'https://tiktok-clone2.vercel.app')
     res.header('Access-Control-Allow-Methods', 'PUT,GET,POST')
     res.header('Access-Control-Allow-Headers', 'X-Request-With,Accept,Content-Type,X-HTTP-Method-Override')
     res.header('Access-Control-Allow-Credentials', true)
