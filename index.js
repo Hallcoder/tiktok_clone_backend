@@ -6,7 +6,7 @@ const cors = require('cors');
 const { post } = require('./routers/posts');
 const { accounts } = require('./routers/accounts');
 const app = express();
-const PORT= process.env.PORT || 4000;
+const PORT= process.env.PORT || 4000; 
 app.use(express.json({limit:'250mb'}))
 app.use(function(req,res,next){
     cors({origin:req.headers.origin})
